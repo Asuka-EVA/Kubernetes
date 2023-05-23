@@ -162,7 +162,7 @@ NAME                  TYPE                                  DATA   AGE
 default-token-7vc82   kubernetes.io/service-account-token   3      30h
 mysecret              Opaque                                2      6s
 
-[root@kub-k8s-master prome]# kubectl get secret mysecret -o yaml
+[root@kub-k8s-master prome]# kubectl get secret mysecret -o yaml -n default
 apiVersion: v1
 data:
   password: MWYyZDFlMmU2N2Rm
