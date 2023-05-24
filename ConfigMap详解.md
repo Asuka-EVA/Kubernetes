@@ -564,3 +564,99 @@ spec:
 ```
 
 ![img](assets/ConfigMap详解/1654855717020-6a9a97bf-771c-4264-9da6-231a4395fcd4.png)
+
+
+
+```shell
+vim cm.yml
+```
+
+```shell
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: configmap-yaml
+  labels:
+    app: configmap
+data:
+  server1.conf: |-   #设定配置文件名称及添加文件内容
+    upstream tomcatserver1 {
+      server 192.168.15.55:8082;  # 这里目前定义为8081
+    }
+    server {
+      listen 80;
+      server_name 8081.max.com;
+      location / {
+        proxy_pass http://tomcatserver1;
+        index index.html index.htm;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+    }
+
+```
+
+```shell
+vim nginx.yml
+```
+
+```shell
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: configmap-pod
+  labels:
+    app: configmap-pod
+spec:
+  containers:
+    - name: nginx
+      image: daocloud.io/library/nginx:latest
+      imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - mountPath: /etc/nginx/conf.d
+          name: conf-name
+  volumes:
+    - name: conf-name
+      configMap:
+        name: configmap-yaml
+        items:
+          - key: server1.conf
+            path: server1.conf
+
+```
+
+```
+kubectl  apply -f cm.yml
+```
+
+```shell
+kubectl apply -f nginx.yml
+```
+
+```shell
+kubectl exec -it configmap-pod /bin/bash
+```
+
+![image-20230524205817098](assets/ConfigMap详解/image-20230524205817098.png)
+
+```shell
+vim cm.yml  ##修改端口
+```
+
+![image-20230524205847422](assets/ConfigMap详解/image-20230524205847422.png)
+
+```
+kubectl  apply -f cm.yml
+```
+
+```shell
+kubectl exec -it configmap-pod /bin/bash
+```
+
+```
+再次查看端口就改变了
+```
+

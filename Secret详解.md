@@ -390,3 +390,33 @@ export DOCKER_EMAIL=root@123.com   #用户邮箱
 ```shell
 [root@k8s-master secret]# kubectl apply -f tomcat.yaml
 ```
+
+阿里云镜像方法
+
+```shell
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  imagePullSecrets:
+  - name: aliyunsecret
+  containers:
+  - name: aliyunsecret
+    image: registry.cn-hangzhou.aliyuncs.com/asuka1997/nginx:latest
+    volumeMounts:
+    - name: foo
+      mountPath: /etc/foo
+      readOnly: true
+  volumes:
+  - name: foo
+    secret:
+      secretName: mysecret
+      items:
+       - key: username
+         path: my-group/user.txt
+       - key: password
+         path: my-group/pass.txt
+
+```
+
