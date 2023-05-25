@@ -110,6 +110,8 @@ spec:
        ports:
        - containerPort: 80
 [root@k8s-master service]# kubectl create -f nginx-dep.yaml
+
+kubectl describe pod  []   ##查看错误原因
 ```
 
 ![img](assets/k8s-Service和endpoints/1654677929088-1d179838-f49b-43db-844d-ab774eaec9be.png)
@@ -404,3 +406,56 @@ Service Selector 将持续评估，结果被 POST 到一个名称为 Service-hel
 
 [
 ](https://blog.51cto.com/u_12606610/5614159)
+
+k8s创建Mysql的Deployment，用Service的CLusterIP暴露，访问测试
+
+```shell
+[root@k8s-master service]# vim mysql-dep.yaml 
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+ name: mysql-dep
+spec:
+ selector:
+   matchLabels:
+     app: mysql
+ replicas: 2
+ template:
+   metadata:
+     labels:
+       app: mysql
+   spec:
+     containers:
+     - name: mysql
+       image:  daocloud.io/library/mysql:5.7.7
+       env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "123"
+       ports:
+       - containerPort: 3306
+
+```
+
+```shell
+[root@k8s-master service]# vim mysql-svc.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+spec:
+ ports:
+   - port: 3306
+     targetPort: 3306
+ selector:
+   app: mysql
+```
+
+```shell
+kubectl apply -f mysql-dep.yaml 
+kubectl apply -f mysql-svc.yaml
+```
+
+![image-20230525195517841](assets/k8s-Service和endpoints/image-20230525195517841.png)
+
