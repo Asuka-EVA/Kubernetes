@@ -4198,33 +4198,33 @@ spec:
 
 
 ```shell
-例2：在上面yaml的基础上添加了volume
+例2：在上面yaml的基础上添加了volume $$$
 [root@kub-k8s-master prome]# vim deployment.yaml
-apiVersion: apps/v1  #注意版本号
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-name: nginx-deployment
+  name: nginx-deployment
 spec:
-selector:  #属性，选择器
-  matchLabels:
-    app: nginx
-replicas: 2  #管理的副本个数
-template:  #模板属性
-  metadata:
-    labels:
-      app: nginx
-  spec:
-    containers:
-    - name: nginx
-      image: daocloud.io/library/nginx
-      ports:
-      - containerPort: 80
-      volumeMounts:  #定义挂载卷
-      - mountPath: "/usr/share/nginx/html"
-        name: nginx-vol
-    volumes:   #定义共享卷
-    - name: nginx-vol
-      emptyDir: {}
+  selector:
+   matchLabels:
+     app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: daocloud.io/library/nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:  #定义挂载卷
+        - name: nginx-vol
+          mountPath: "/usr/share/nginx/html"
+      volumes:   #定义共享卷
+      - name: nginx-vol
+        emptyDir: {}
 ```
 
 
@@ -4323,7 +4323,7 @@ hostPath:k8s 也提供了显式的 Volume 定义，它叫做 hostPath。比如�
 ## 创建SERVICE
 
 ```shell
-三台安装iptables：
+三台安装iptables：      $$$$$$
 [root@kub-k8s-master prome]# yum install -y iptables iptables-services
 1.创建一个depl
 [root@kub-k8s-master prome]# kubectl delete -f deployment.yaml
@@ -4362,8 +4362,8 @@ spec:
     - port: 8080  #ClusterIP的端口
       nodePort: 30001  #node节点暴露的端口
       targetPort: 80    #pod的端口
-  selector:   #选择器
-    app: web
+  selector:   #选择器 
+    app: web  #nginx
 
 [root@kub-k8s-master prome]# kubectl apply -f nginx_svc.yaml 
 
@@ -4374,7 +4374,9 @@ kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP          5d18h
 mysvc        NodePort    10.100.166.208   <none>        8080:30001/TCP   21s
 ```
 
-
+```
+[root@k8s-master prome]# kubectl get endpoints
+```
 
 **端口详解**
 
@@ -4471,8 +4473,8 @@ Replication Controller会确保pod的数量在运行的时候会一直保持在�
 
 
 ```shell
-[root@kub-k8s-master ~]# cd prome/
-[root@kub-k8s-master prome]# vim nginx-rc.yml
+[root@kub-k8s-master ~]# cd prome/                                               $$$$
+[root@kub-k8s-master prome]# vim nginx-rc.yaml
 ---
 apiVersion: v1
 kind: ReplicationController
