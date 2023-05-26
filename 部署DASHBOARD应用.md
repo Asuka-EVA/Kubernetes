@@ -1,4 +1,6 @@
-pod  页面应用提权<----- serviceacoount<-->clusterrole(pod,svc,ns,secret....     ;  get list watch delete create ...)
+# 部署Dashboard应用
+
+pod  页面应用提权<----- serviceaccount<-->clusterrole(pod,svc,ns,secret....     ;  get list watch delete create ...)
 
 pod  页面应用    ---> default命名空间下：nginx pod
 
