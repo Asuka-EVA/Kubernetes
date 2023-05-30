@@ -704,6 +704,13 @@ StatefulSet、pv的动态存储
 
 制作动态存储storageclass与nfs的共享目录相关联，这里我是用的helm工具。
 
+```
+helm ls --all-namespaces
+helm uninstall phoenix-chart --namespace other
+```
+
+
+
 ```plain
 [root@k8s-master ~]# helm install nfs-redis stable/nfs-client-provisioner --set nfs.server=192.168.153.148 --set nfs.path=/data/nfs
 [root@k8s-master ~]# helm list
@@ -986,6 +993,11 @@ spec:
 
 
 先试试ubuntu这个pod是否能与redis所有pod进行通信
+
+```
+apt-get update
+apt-get install dnsutils
+```
 
 
 
